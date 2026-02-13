@@ -1363,13 +1363,21 @@ f .letter-wrapper.clickable {
 
 @media (max-width: 480px) {
   .letter-wrapper {
-    width: 380px;
+    width: 90vw;
+    max-width: 380px;
     height: 380px;
+  }
+
+  /* Reduce lift on mobile to prevent top cutoff */
+  .letter-container.opening .letter-content {
+    transform: translateX(-50%) translateY(-140px);
   }
 
   .letter-content {
     padding: 20px 15px;
     top: 15px;
+    box-sizing: border-box; /* Ensure padding doesn't overflow */
+    width: 95%; /* Slightly reduce width on mobile */
   }
 
   .letter-header {
