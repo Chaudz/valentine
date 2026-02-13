@@ -11,6 +11,8 @@ function App() {
   const [isLetterOpen, setIsLetterOpen] = useState(false);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
+  const typingAudioRef = useRef<HTMLAudioElement>(null);
+
   // Auto-play audio when gift is opened
   useEffect(() => {
     if (!isGiftOpened) return;
@@ -43,6 +45,35 @@ function App() {
     // Try to play immediately when gift opens
     playAudio();
   }, [isGiftOpened]);
+
+  // Handle typing sound
+  useEffect(() => {
+    if (showLetter && isLetterOpen && !isTypingComplete) {
+      // Delay start to match first paragraph animation (approx 1.2s)
+      const startTimer = setTimeout(() => {
+        if (typingAudioRef.current) {
+          typingAudioRef.current.currentTime = 0;
+          typingAudioRef.current.volume = 0.6;
+          typingAudioRef.current
+            .play()
+            .catch((e) => console.log("Typing sound play failed", e));
+        }
+      }, 1200);
+
+      // Stop sound when typing finishes (approx 11s)
+      const stopTimer = setTimeout(() => {
+        if (typingAudioRef.current) {
+          typingAudioRef.current.pause();
+        }
+      }, 11000);
+
+      return () => {
+        clearTimeout(startTimer);
+        clearTimeout(stopTimer);
+        if (typingAudioRef.current) typingAudioRef.current.pause();
+      };
+    }
+  }, [showLetter, isLetterOpen, isTypingComplete]);
 
   // Particle animation for background
   useEffect(() => {
@@ -134,7 +165,7 @@ function App() {
       // Mark typing as complete after all text has typed out
       setTimeout(() => {
         setIsTypingComplete(true);
-      }, 13500); // 13s for all typing + 0.5s buffer
+      }, 12500); // 13s for all typing + 0.5s buffer
     }
   }, [showLetter, isLetterOpen]);
 
@@ -181,7 +212,9 @@ function App() {
     return (
       <div className="letter-page">
         <canvas ref={canvasRef} className="particles-canvas" />
+        <canvas ref={canvasRef} className="particles-canvas" />
         <audio ref={audioRef} src="/music2.mp3" loop />
+        <audio ref={typingAudioRef} src="/go-phim.mp3" />
 
         <div className={`letter-container ${isLetterOpen ? "opening" : ""}`}>
           <div
