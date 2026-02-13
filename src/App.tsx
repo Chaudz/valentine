@@ -210,8 +210,8 @@ function App() {
                   Mỗi ngày bên em đều là những khoảnh khắc <br /> đáng trân
                   trọng nhất.
                 </p>
-                <p>Happy Valentine's Day! 💖</p>
-                <p className="signature">Yêu em nhiều lắm! ❤️</p>
+                <p>Happy Valentine's Day! Yêu em nhiều lắm💖</p>
+                {/* <p className="signature">Yêu em nhiều lắm! ❤️</p> */}
               </div>
             </div>
           </div>
